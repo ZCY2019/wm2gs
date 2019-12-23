@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gs56.wm2gs56.mapper.OrderMapper">
+
+    <insert id="insertOrderDetail">
+        insert  order_detail_test (order_num,g_id,sale_price,goods_name,unit,quantity,sale_amount,cost,kind) values
+        <foreach collection="list" item="i" separator=",">
+            (#{i.orderNum},#{i.goodsCode},#{i.price},#{i.goodsTitle},#{i.unit},#{i.skuNum},#{i.totalAmount},#{i.costPrice},#{i.kind})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrderList">
+        insert  order_list_test (order_num,status,createtime,customer_id,customer_name,customer_address,amount,customer_phone,remark,sale_name,sale_phone,customer_path,customer_region,deliver,deliver_phone,deliver_time,source) values
+        <foreach collection="list" item="i" separator=",">
+            (#{i.order_num},'1',#{i.createTime},#{i.customer_id},#{i.customer_name},#{i.customer_address},#{i.goodsAmount},#{i.customer_phone},#{i.amount},#{i.sale_name},#{i.sale_phone},#{i.customer_path},#{i.customer_region},#{i.deliver},#{i.deliver_phone},#{i.deliver_time},'00')
+        </foreach>
+    </insert>
+
+    <insert id="insertCoreOrderDetail">
+        insert  core.order_detail_test (order_num,g_id,sale_price,goods_name,unit,quantity,sale_amount,cost,kind) values
+        <foreach collection="list" item="i" separator=",">
+            (#{i.orderNum},#{i.goodsCode},#{i.price},#{i.goodsTitle},#{i.unit},#{i.skuNum},#{i.totalAmount},#{i.costPrice},#{i.kind})
+        </foreach>
+    </insert>
+    <insert id="insertCoreOrderList">
+        insert  core.order_list_test (order_num,status,create_time,customer_id,customer_name,customer_address,amount,customer_phone,remark,sale_name,sale_phone,customer_path,customer_region,deliver,deliver_phone,deliver_time,source) values
+        <foreach collection="list" item="i" separator=",">
+            (#{i.order_num},'1',#{i.createTime},#{i.customer_id},#{i.customer_name},#{i.customer_address},#{i.goodsAmount},#{i.customer_phone},#{i.amount},#{i.sale_name},#{i.sale_phone},#{i.customer_path},#{i.customer_region},#{i.deliver},#{i.deliver_phone},#{i.deliver_time},'00')
+        </foreach>
+    </insert>
+
+    <select id="selectUnitById" resultType="Map" parameterType="String">
+        select unit,kind from goods where id = #{goodsCode}
+    </select>
+
+
+
+
+
+    <select id="selectDeliveryOrderByOrderNum" resultType="com.gs56.wm2gs56.dto.Order">
+        select * from order_list where status = '4' and DATEDIFF(createtime,NOW())=-1 and LENGTH(order_num)=14 and is_delivery ='0'
+    </select>
+
+    <update id="updateDeliveryOrder" >
+        update order_list SET is_delivery = '1' where is_delivery ='0' and  order_num in
+
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <insert id="insertUserCenter" >
+        insert into core.user_center (`name`,business_name,phone,register_platform,address,`type`,create_time,liable,liable_phone,deliver_time) values
+        (#{i.customer_name},#{i.customer_name},#{i.customer_phone},'小程序',#{i.customer_address},'1',#{i.createTime},'无业务员','00000000000','8:00-9:30')
+    </insert>
+
+    <resultMap id="BaseResultMap" type="com.gs56.wm2gs56.dto.CustomersNws">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="m_id" property="mId" jdbcType="INTEGER"/>
+        <result column="business_name" property="businessName" jdbcType="VARCHAR"/>
+        <result column="business_address" property="businessAddress" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="business_path" property="businessPath" jdbcType="VARCHAR"/>
+        <result column="pick_remark" property="pickRemark" jdbcType="VARCHAR"/>
+        <result column="invoice_remark" property="invoiceRemark" jdbcType="VARCHAR"/>
+        <result column="region" property="region" jdbcType="VARCHAR"/>
+        <result column="sales_phone" property="salesPhone" jdbcType="VARCHAR"/>
+        <result column="sales_person" property="salesPerson" jdbcType="VARCHAR"/>
+        <result column="deliver" property="deliver" jdbcType="VARCHAR"/>
+        <result column="deliver_phone" property="deliverPhone" jdbcType="VARCHAR"/>
+        <result column="deliver_time" property="deliverTime" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, m_id, business_name, business_address, phone, business_path, pick_remark, invoice_remark,
+        region, sales_phone, sales_person, deliver, deliver_phone, deliver_time
+    </sql>
+
+    <select id="queryCustomerIdByPhone" resultMap="BaseResultMap" parameterType ="String">
+        select
+        <include refid="Base_Column_List"/>
+        from customers where phone = #{phone}
+    </select>
+
+
+</mapper>

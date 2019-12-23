@@ -1,0 +1,22 @@
+server:
+  port: 2019
+  max-http-header-size: 10000000
+mybatis:
+  config-location: classpath:mybatis-config.xml
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    username: zhaozy
+    password: 1q2w3e4r
+    url: jdbc:mysql://rdsxm1522e90p2qhz6j7o.mysql.rds.aliyuncs.com/nws?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&allowMultiQueries=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 15
+      max-lifetime: 1800000
+logging:
+  level:
+    com:
+      dy:
+        springboot:
+          server:
+            mapper=debug:
