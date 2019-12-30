@@ -1,6 +1,7 @@
 package com.gs56.wm2gs56.controller;
 
 
+import com.gs56.wm2gs56.dto.Order;
 import com.gs56.wm2gs56.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * @author gaishi_z
@@ -55,6 +57,14 @@ public class OrderController {
         JSONObject resJSONObject = HttpJson.doPost("/order/queryOrderList",paramJsonObject);
        // orderService.getData(resJSONObject);
     }*/
+
+    /**
+     * 核对当天订单
+     */
+    @RequestMapping("checkOrder")
+    public   void  checkOrder(){
+         orderService.checkOrder();
+    }
 
 
 

@@ -82,4 +82,28 @@
     </select>
 
 
+    <select id="checkOrder" resultType="com.gs56.wm2gs56.dto.Order">
+        select   ol.*  from  order_list_test  ol
+        inner join  order_detail_test  od
+        on  ol.order_num = od.order_num
+        WHERE   ol.createtime   BETWEEN DATE_SUB(curdate(),INTERVAL 0 DAY)   and  DATE_SUB(curdate(),INTERVAL -1 DAY)
+        GROUP BY ol.order_num
+        HAVING  sum(od.pick_amount) != ol.pick_amount
+
+    </select>
+
+    <select id="checkOrderExists"  resultType="com.gs56.wm2gs56.dto.Order">
+                select *   from  order_list_test
+				WHERE  order_num   not  in  (SELECT order_num   FROM  order_detail_test  GROUP BY  order_num )
+    </select>
+
+    <insert id="insertError_Exists"  parameterType="String" >
+       		INSERT  error_test (ordernum,description) VALUES (#{orderNum},'订单不存在')
+    </insert>
+
+    <insert id="insertError_Check" parameterType="String">
+        INSERT  error_test (ordernum,description) VALUES (#{orderNum},'金额错误')
+    </insert>
+
+
 </mapper>

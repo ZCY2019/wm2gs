@@ -227,4 +227,18 @@ public class OrderService {
         System.out.println(orderList);
 
     }
+
+    public void checkOrder() {
+
+         List<Order>  lists =  orderMapper.checkOrderExists();
+
+         for (Order  order  : lists){
+             orderMapper.insertError_Exists(order.getOrderNum());
+         }
+
+        List<Order>  lists2 =   orderMapper.checkOrder();
+         for (Order  order  :lists2){
+             orderMapper.insertError_Check(order.getOrderNum());
+         }
+    }
 }

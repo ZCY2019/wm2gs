@@ -33,4 +33,13 @@ public interface OrderMapper {
     int insertUserCenter(Map<String, Object> orderMap);
 
     Map<String,Object> selectUnitById(@Param("goodsCode")String goodsCode);
+
+    List<Order> checkOrder();
+
+
+    List<Order> checkOrderExists();
+
+    int insertError_Exists(String orderNum);
+
+    int insertError_Check(String orderNum);
 }
